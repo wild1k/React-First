@@ -1,5 +1,6 @@
 
 import React from 'react'
+import "./style.css"
 
 function Button ({onHandleClick, title, disabledBy}) {
     return(

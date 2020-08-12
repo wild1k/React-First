@@ -3,31 +3,18 @@ import axios from "axios";
 import './App.css';
 import Searchbar from "./components/SearchBar/index";
 import Button from "./components/Button/index";
-
-
+import EmployeeCard  from "./components/EmployeeCard/index";
+import NavBar from "./components/NavBar/index";
 
 
 const styles = {
   employeeContainer: {
-    displayFlex: "flex",
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    alignContent: "spaceBetween",
+    flexDirection: "column",
+    flexWrap: "wrap",
+  
   }
 }
-
-function EmployeeCard ({img, name, phone, email}){
-  return (
-  <>
-    <img src={img} alt={name.first} />
-    <div>
-    <p>{`${name.title} ${name.first} ${name.last}`}</p>
-    <p>{phone}</p>
-    <p>{email}</p>
-    </div>
-</>
-);
-}
-
 
 class App extends Component {
   state = {
@@ -53,7 +40,7 @@ class App extends Component {
   };
 
   makeRequest= async () => {
-    const URL = `https://randomuser.me/api/?results=30&nat=us`;
+    const URL = "https://randomuser.me/api/?results=30&nat=us"
     
     
     try {
@@ -61,7 +48,7 @@ class App extends Component {
      results.data.results.map(user => {
        const fullName = `${user.name.first} ${user.name.last}`
        user.name.fullName = fullName
-       return user
+       return fullName
      })
 
      console.log(results.data.results);
@@ -75,18 +62,17 @@ class App extends Component {
     }
   };
 
+
   sortEmpAlphaFirst = (e) => {
     e.preventDefault()
     const usersCopy = [...this.state.users]
-    const sortedUsers = usersCopy.sort((a, b) => {
-      if (a.name.first < b.name.first) {
-        return -1
-      } else {
-        return 1
-      }
+    usersCopy.sort(function(a, b){
+      if(a.name.first < b.name.first) { return -1; }
+    if(a.name.first > b.name.first) { return 1; }
+    return 0;
     })
-    this.setState({ filteredUsers: sortedUsers })
-  }
+}
+
   sortEmpAlphaLast = (e) => {
     e.preventDefault()
     const usersCopy = [...this.state.users]
@@ -107,19 +93,18 @@ class App extends Component {
   render () {
   return (
     <>
-    
     <div className="App">
-      <h1>Employee Directory</h1>
-      <form className="form-inline">
-        Search for Employees
-        <Searchbar search={this.state.searchField} handleInputChange={this.handleInputChange}/>
-        <Button onHandleClick={this.sortEmpAlphaFirst} title={'Sort by First Name'} />
-            <Button onHandleClick={this.sortEmpAlphaLast} title={'Sort by Last Name'} />
-      
-    <Button onClick={this.sortEmpAlpha} title={'Sort by Alphabetical'} title={'Submit'}/>
-</form>
-      <div style={styles.employeeContainer}>
+      <NavBar/>
+     
+        <Searchbar />
+        <div style={styles.employeeContainer}>
+        <Button onClick={this.sortEmpAlphaFirst} title={'Sort by First Name'} />
+            <Button onClick={this.sortEmpAlphaLast} title={'Sort by Last Name'} />
+            <Button searchField={this.state.searchField} handleInputChange={this.handleInputChange} title={'Submit'}/>
+
+        <div className="row">
           {this.renderEmployees()}
+          </div>
         </div>
 
     </div>
