@@ -27,16 +27,8 @@ class App extends Component {
     this.makeRequest()
   }
 
-  handleInputChange = (e) => {
-    e.preventDefault();
-    let usersCopy = [...this.state.users]
-    this.setState({
-      searchField: e.target.value, filteredUsers: usersCopy.filter(users => (
-        users.name.first.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        users.name.last.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        users.name.fullName.toLowerCase().includes(e.target.value.toLowerCase())
-      ))
-    });
+  handleInputChange = event => {
+    this.setState({ search: event.target.value });
   };
 
   makeRequest= async () => {
@@ -62,28 +54,52 @@ class App extends Component {
     }
   };
 
+  searchByLast = (e) => {
+    e.preventDefault()
+    const search = this.state.searchField
+    const sortedUsers = this.state.users.filter((users, searchField) => {
+      if (search === users.name.last){
+        return true
+      }
+      if (search !== users.name.last) {
+         console.log(searchField);
+        return false
+      }
+      return 0;
+    })
+    this.setState({ filteredUsers: sortedUsers})
+   
+}
+
 
   sortEmpAlphaFirst = (e) => {
     e.preventDefault()
-    const usersCopy = [...this.state.users]
-    usersCopy.sort(function(a, b){
-      if(a.name.first < b.name.first) { return -1; }
-    if(a.name.first > b.name.first) { return 1; }
-    return 0;
+    const sortedUsers = this.state.filteredUsers.sort((a, b) => {
+      if (a.name.first < b.name.first) {
+        return -1
+      } 
+      if (a.name.first > b.name.first) {
+        return 1
+      }
+      return 0;
     })
+    this.setState({ filteredUsers: sortedUsers })
+
 }
 
   sortEmpAlphaLast = (e) => {
     e.preventDefault()
-    const usersCopy = [...this.state.users]
-    const sortedUsers = usersCopy.sort((a, b) => {
+    const sortedUsers = this.state.filteredUsers.sort((a, b) => {
       if (a.name.last < b.name.last) {
         return -1
-      } else {
+      } 
+      if (a.name.last > b.name.last) {
         return 1
       }
+      return 0;
     })
     this.setState({ filteredUsers: sortedUsers })
+    console.log(this.state);
   }
 
   renderEmployees =()=> {
@@ -98,9 +114,9 @@ class App extends Component {
      
         <Searchbar />
         <div style={styles.employeeContainer}>
-        <Button onClick={this.sortEmpAlphaFirst} title={'Sort by First Name'} />
-            <Button onClick={this.sortEmpAlphaLast} title={'Sort by Last Name'} />
-            <Button searchField={this.state.searchField} handleInputChange={this.handleInputChange} title={'Submit'}/>
+        <Button onHandleClick={this.sortEmpAlphaFirst} title={'Sort by First Name'} />
+            <Button onHandleClick={this.sortEmpAlphaLast} title={'Sort by Last Name'} />
+            <Button onHandleClick={this.searchByLast} title={'Submit'}/>
 
         <div className="row">
           {this.renderEmployees()}
