@@ -7,9 +7,9 @@ export default function Searchbar(props) {
     return (
         <>
             <div className="px-2 container">
-                <form>
+                {/* <form>
                 <input value={props.searchField} className='form-control' type='search' name='searchField' placeholder='Search Employees' onChange={props.handleInputChange} />
-                </form>
+                </form> */}
             </div>
         </>
     )

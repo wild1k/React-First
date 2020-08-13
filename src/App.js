@@ -116,7 +116,7 @@ class App extends Component {
         <div style={styles.employeeContainer}>
         <Button onHandleClick={this.sortEmpAlphaFirst} title={'Sort by First Name'} />
             <Button onHandleClick={this.sortEmpAlphaLast} title={'Sort by Last Name'} />
-            <Button onHandleClick={this.searchByLast} title={'Submit'}/>
+            {/* <Button onHandleClick={this.searchByLast} title={'Submit'}/> */}
 
         <div className="row">
           {this.renderEmployees()}
